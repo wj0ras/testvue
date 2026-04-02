@@ -4,6 +4,14 @@
   --accent-border: rgba(170, 59, 255, 0.5);
 }
 
+body {
+  background-color: #1d1d1d;
+  height: 100svh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 @media (prefers-color-scheme: dark) {
   body {
     background-color: #1d1d1d;
