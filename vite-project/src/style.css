@@ -4,6 +4,12 @@
   --accent-border: rgba(170, 59, 255, 0.5);
 }
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   background-color: #1d1d1d;
   height: 100svh;
