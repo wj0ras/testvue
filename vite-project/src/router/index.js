@@ -7,7 +7,22 @@ const routes = [
   { path: '/dashboard', component: Dashboard },
 ]
 
-export default createRouter({
+const router = createRouter({
   history: createWebHistory(),
   routes
 })
+
+// Verifica antes de cada navegação
+router.beforeEach(async (to) => {
+  if (!to.meta.requiresAuth) return true // rota pública, libera
+
+  const { data } = await supabase.auth.getSession()
+
+  if (!data.session) {
+    return '/' // não logado → manda pro login
+  }
+
+  return true // logado → libera
+})
+
+export default router

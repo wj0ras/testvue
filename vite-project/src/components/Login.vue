@@ -1,6 +1,6 @@
 <template>
 
-    <div class="card w-96">
+    <div class="card w-64 md:w-80 lg:w-96">
 
       <form @submit.prevent="handleLogin" class="form">
         <div class="field">
@@ -45,7 +45,7 @@ const handleLogin = async () => {
         email: email.value,
         password: password.value
     })
-    
+
     if (error) throw error
 
     router.push('/dashboard')
