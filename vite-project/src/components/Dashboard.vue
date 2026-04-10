@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col p-4">
         <header class="flex justify-between items-center mb-4">
-            <button @click="$refs.expenseModal.openModal()" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded">+ Adicionar Despesa</button>
+            <button @click="$refs.expenseModal.openModal()" class="bg-gray-500 hover:bg-grayn-600 text-white py-2 px-4 rounded">+ Adicionar Despesa</button>
         </header>
 
         <main>
