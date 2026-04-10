@@ -1,35 +1,21 @@
 <template>
-    <div class="text-white">
+    <div class="text-white bg-gray-600 p-2 rounded">
         <ul v-if="expenses.length">
             <li v-for="expense in expenses" :key="expense.id">
-                {{ expense.name }}: {{ expense.amount }}
+                {{ expense.description }}: {{ expense.amount }} BRL
             </li>
         </ul>
-        <p v-else >dsad</p>
+        <p v-else>Nenhum gasto hoje.</p>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { supabase } from '../lib/supabase.js';
+import { onMounted } from 'vue';
+import { useExpenses } from '../composables/useExpenses';
 
-const expenses = ref([]);
+const { expenses, fetchExpenses } = useExpenses();
 
-const fetchExpenses = async () => {
-    const { data, error } = await supabase
-        .from('expenses')
-        .select('*');
-
-    if (error) {
-        console.error('Error fetching expenses:', error);
-    } else {
-        expenses.value = data;
-    }
-};
-
-onMounted(() => {
-    fetchExpenses();
-});
+onMounted(fetchExpenses);
 </script>
 
 <style scoped>

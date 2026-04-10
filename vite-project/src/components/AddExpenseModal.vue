@@ -9,11 +9,11 @@
             
             <form @submit.prevent="submitExpense" class="form">
                 <div class="form-group">
-                    <label for="name">Descrição:</label>
+                    <label for="description">Descrição:</label>
                     <input 
-                        v-model="formData.name" 
+                        v-model="formData.description" 
                         type="text" 
-                        id="name"
+                        id="description"
                         placeholder="Digite a descrição"
                         required
                     />
@@ -30,6 +30,16 @@
                         required
                     />
                 </div>
+
+                <div class="form-group">
+                    <label for="category">Categoria:</label>
+                    <select v-model="formData.category" id="category" required>
+                        <option value="Alimentação">Alimentação</option>
+                        <option value="Transporte">Transporte</option>
+                        <option value="Moradia">Moradia</option>
+                        <option value="Lazer">Lazer</option>
+                    </select>
+                </div>
                 
                 <div class="form-actions">
                     <button type="button" @click="closeModal" class="btn-cancel">Cancelar</button>
@@ -43,9 +53,10 @@
 <script setup>
 import { ref } from 'vue';
 import { supabase } from '../lib/supabase.js';
-
+import { showToast } from '../store/toast.js';
+import { useExpenses } from '../composables/useExpenses';
 const showModal = ref(false);
-const formData = ref({ name: '', amount: '' });
+const formData = ref({ description: '', amount: '' });
 
 const openModal = () => {
     showModal.value = true;
@@ -53,32 +64,55 @@ const openModal = () => {
 
 const closeModal = () => {
     showModal.value = false;
-    formData.value = { name: '', amount: '' };
+    formData.value = { description: '', amount: '' };
 };
+const { fetchExpenses } = useExpenses();
 
 const submitExpense = async () => {
-    if (!formData.value.name || !formData.value.amount) {
-        alert('Por favor, preencha todos os campos');
+    if (!formData.value.description || !formData.value.amount) {
+        showToast("Por favor, preencha todos os campos.", "error");
         return;
     }
 
-    const { error } = await supabase
-        .from('expenses')
-        .insert([
-            {
-                name: formData.value.name,
-                amount: formData.value.amount
-            }
-        ]);
+const today = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
 
-    if (error) {
-        console.error('Erro ao inserir despesa:', error);
-        alert('Erro ao adicionar despesa');
-    } else {
-        alert('Despesa adicionada com sucesso!');
+  // 1. Tentar buscar o dia de hoje para este usuário
+  let { data: dayRecord, error: dayError } = await supabase
+    .from('expense_days')
+    .select('id')
+    .eq('date', today)
+    .single();
+
+  let targetDayId;
+
+  // 2. Se o dia não existir, vamos criá-lo
+  if (!dayRecord) {
+    const { data: newDay, error: createDayError } = await supabase
+      .from('expense_days')
+      .insert([{  date: today }])
+      .select()
+      .single();
+    
+    if (createDayError) throw createDayError;
+    targetDayId = newDay.id;
+  } else {
+    targetDayId = dayRecord.id;
+  }
+
+  // 3. Agora inserimos a despesa vinculada ao ID do dia
+  const { error: expenseError } = await supabase
+    .from('expenses')
+    .insert([{
+      description: formData.value.description,
+      amount: formData.value.amount,
+      category: formData.value.category,
+      day_id: targetDayId 
+    }]);
+
+  if (!expenseError) {
+        showToast("Sucesso!", "success");
+        await fetchExpenses(); // Atualiza o estado global!
         closeModal();
-        // Recarrega a página para atualizar a lista
-        window.location.reload();
     }
 };
 
