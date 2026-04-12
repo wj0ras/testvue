@@ -1,5 +1,11 @@
 <template>
-  <div class="w-full h-svh flex justify-center items-center">
+  <div class="w-full h-svh flex gap-6 flex-col justify-center items-center bg-[radial-gradient(circle_at_top,_#a8a500,_#6D6A0C,_#578C67)]">
+    <div class="title">
+      <h1 class="text-5xl font-bold text-white">d<span class="border border-white bg-green-900 px-1">Es</span>pes<span class="border border-white bg-green-900 px-1">As</span></h1>
+    </div>
+    <img src="../assets/money.png" class="absolute bottom-0 right-0" alt="">
+    <img src="../assets/money-two.png" class="absolute bottom-0 left-0" alt="">
+    <img src="../assets/quim-mask.png" class="w-64 absolute bottom-0 left-1/2 -translate-x-1/2" alt="">
     <div class="card w-64 md:w-80 lg:w-96">
       <form @submit.prevent="handleLogin" class="form">
         <div class="field">
@@ -68,14 +74,19 @@ const handleLogin = async () => {
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@500&display=swap");
-
+.title {
+   font-family: "Barriecito", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
 .card {
   position: relative;
-   background: linear-gradient(
+  background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.18),
-    rgba(255, 255, 255, 0.02),
-    rgba(99, 102, 241, 0.3)
+    #578C67,
+    #507028,
+    #173A00
+    
   );
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
@@ -106,7 +117,7 @@ const handleLogin = async () => {
 .logo-text {
   font-weight: 600;
   font-size: 15px;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgb(255, 255, 255);
 }
 
 .heading {
@@ -131,7 +142,7 @@ const handleLogin = async () => {
   font-weight: 500;
   letter-spacing: 0.6px;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.38);
+  color: rgba(255, 255, 255, 0.842);
   margin-bottom: 7px;
 }
 .field input {
@@ -162,24 +173,24 @@ const handleLogin = async () => {
 }
 .field-footer a {
   font-size: 12px;
-  color: rgba(99, 102, 241, 0.8);
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
 }
 .field-footer a:hover {
-  color: #818cf8;
+  color: #d1d0d0;
 }
 
 .btn {
   width: 100%;
   margin-top: 0.5rem;
   padding: 12px;
-  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  background: linear-gradient(135deg, #548308, #babd03);
   border: none;
   border-radius: 10px;
   font-family: "DM Sans", sans-serif;
   font-size: 14.5px;
   font-weight: 600;
-  color: #fff;
+  color: #ffffff;
   cursor: pointer;
   transition:
     opacity 0.2s,
